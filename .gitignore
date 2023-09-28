@@ -163,3 +163,5 @@ cython_debug/
 *.nc
 *.png
 *.csv
+*.npy
+cryo
