@@ -3,7 +3,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 # "fix" or "fix_ssb"
-prefix = "brock_south_hemi" 
+prefix = "rads_north_cryotempo" 
 
 # Path to data folder and files
 data_folder = Path(f"data/data_{prefix}")

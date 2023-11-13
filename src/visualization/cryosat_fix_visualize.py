@@ -6,7 +6,7 @@ import cartopy.crs as ccrs
 from pathlib import Path
 
 # "fix" or "fix_ssb"
-prefix = "brock_south_hemi"
+prefix = "brock_south_hemi_new"
 
 file = Path(f"data/data_{prefix}/combined_{prefix}/combined_2019_08.nc")
 data = xr.load_dataset(file)
