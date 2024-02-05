@@ -167,5 +167,6 @@ cython_debug/
 cryo
 *.DS_Store
 *.pptx
-*.kml
 *.txt
+*.kml
+*.sort
