@@ -13,7 +13,8 @@ files = list(data_folder.glob("*.nc"))
 variables = [
     'sea_level_anomaly',
     'sea_level_anomaly_filtered',
-    'sea_level_anomaly_uncertainty'
+    'sea_level_anomaly_uncertainty',
+    'sea_level_anomaly_raw'
 ]
 
 # Subset variables of interest for first day
