@@ -2,13 +2,6 @@ import xarray as xr
 from pathlib import Path
 from tqdm import tqdm
 
-# "fix" or "fix_ssb"
-prefix = "rads_north_cryotempo" 
-
-# Path to data folder and files
-data_folder = Path(f"data/data_{prefix}")
-files = list(data_folder.glob("*.nc"))
-
 # Select variables of interest
 variables = [
     'sea_level_anomaly',
@@ -17,19 +10,34 @@ variables = [
     'sea_level_anomaly_raw'
 ]
 
-# Subset variables of interest for first day
-initial_data = xr.open_dataset(files[0], engine="netcdf4")
-combined_data = initial_data[variables]
+# folder name
+folder = "phase21_arctic_all_years" 
+# Path to data folder and files
+data_folder = Path(f"data/{folder}")
+# Make save folder
+save_folder_years = Path(data_folder, "save_folder_years")
+save_folder_years.mkdir(parents=True, exist_ok=True)
 
-# Consequtively subset each remaining day and add to data set
-for file in tqdm(files[1:]):
-    temporary_data = xr.open_dataset(file)
-    combined_data = xr.concat((combined_data, temporary_data[variables]), dim="time")
 
-# Sort by time
-combined_data = combined_data.sortby("time")
+years = list(range(10,22))
 
-Path(data_folder, f"combined_{prefix}").mkdir(parents=True, exist_ok=True)
+for year in tqdm(years, position=0):
+    if Path(save_folder_years, f"combined_{folder}_20{year}.nc").exists():
+        continue
+    files = list(data_folder.glob(f"combined_{folder}_20{year}*.nc"))
+    initial_data = xr.open_dataset(files[0])
+    combined_data = [initial_data[variables]]
+    
+    for file in files[1:]:
+        # Consequtively subset each remaining day and add to data set
+        temporary_data = xr.open_dataset(file)
+        combined_data.append(temporary_data[variables])
 
-# Save to file
-combined_data.to_netcdf(Path(data_folder, f"combined_{prefix}", "combined_2019_08.nc"))
+    combined_data = xr.concat(combined_data, dim="time")
+
+        # Sort by time
+    combined_data = combined_data.sortby("time")
+
+        # Save to file
+    combined_data.to_netcdf(Path(save_folder_years, f"combined_{folder}_20{year}.nc"))
+
