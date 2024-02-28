@@ -3,7 +3,7 @@ from pathlib import Path
 from tqdm import tqdm
 import numpy as np
 
-PHASE = 1 # 1 or 21
+PHASE = 21 # 1 or 21
 MONTHS = [1, 2, 3, 6, 7, 8]
 BASEPATH = Path(f"data/save_folder_Beaufort_phase{PHASE}")
 SAVEPATH = Path(f"data/yearly_average_Beaufort_phase{PHASE}")
@@ -22,9 +22,10 @@ def main():
             min_time = np.datetime64(f"{year}-{month:02d}-01")
             max_time = np.datetime64(f"{year}-{month+1:02d}-01") # doesnt work with december
             data_month = data.isel(time=(data.time < max_time) & (data.time >= min_time))
-            slar = np.nanmean(np.multiply(data_month.sea_level_anomaly_raw.values,np.cos(data_month.latitude.values*np.pi/180)))
-            sla = np.nanmean(np.multiply(data_month.sea_level_anomaly, np.cos(data_month.latitude*np.pi/180)))
-            slaf = np.nanmean(np.multiply(data_month.sea_level_anomaly_filtered, np.cos(data_month.latitude*np.pi/180)))
+            
+            slar = np.nanmean(np.multiply(data_month.sea_level_anomaly_raw.values,np.cos(data_month.latitude.values*np.pi/180)/np.cos(70*np.pi/180)))
+            sla = np.nanmean(np.multiply(data_month.sea_level_anomaly, np.cos(data_month.latitude*np.pi/180)/np.cos(70*np.pi/180)))
+            slaf = np.nanmean(np.multiply(data_month.sea_level_anomaly_filtered, np.cos(data_month.latitude*np.pi/180)/np.cos(70*np.pi/180)))
 
             average_slar.append(slar)
             average_sla.append(sla)
